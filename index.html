@@ -1,13 +1,127 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Hello World!</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>yt-dlp GUI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+    <div class="app">
+      <div class="drag-region"></div>
+
+      <header class="header">
+        <h1 class="logo">yt-dlp&thinsp;<span class="logo-accent">GUI</span></h1>
+        <p class="tagline">2026 version by axo4xo</p>
+      </header>
+
+      <main class="main">
+        <div class="field">
+          <label for="ytdlp-path">yt-dlp binary</label>
+          <div class="input-group">
+            <input
+              type="text"
+              id="ytdlp-path"
+              placeholder="/usr/bin/yt-dlp"
+              spellcheck="false"
+            />
+            <button
+              type="button"
+              class="btn-browse"
+              id="browse-ytdlp"
+              title="Browse"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="source-url">source URL</label>
+          <input
+            type="url"
+            id="source-url"
+            placeholder="https://youtube.com/watch?v=..."
+            spellcheck="false"
+          />
+        </div>
+
+        <div class="field">
+          <label for="download-path">download to</label>
+          <div class="input-group">
+            <input
+              type="text"
+              id="download-path"
+              placeholder="~/Downloads"
+              spellcheck="false"
+            />
+            <button
+              type="button"
+              class="btn-browse"
+              id="browse-folder"
+              title="Browse"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn-download btn-mp3" id="download-mp3">
+            <span class="btn-icon">♫</span>
+            <span class="btn-text">Download MP3</span>
+          </button>
+          <button type="button" class="btn-download btn-mp4" id="download-mp4">
+            <span class="btn-icon">▶</span>
+            <span class="btn-text">Download MP4</span>
+          </button>
+        </div>
+
+        <div class="status" id="status">
+          <div class="status-text" id="status-text">Ready</div>
+          <div class="progress-container" id="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+          </div>
+          <button type="button" class="btn-cancel hidden" id="cancel-btn">
+            Cancel
+          </button>
+          <button type="button" class="btn-open hidden" id="open-folder-btn">
+            Open Folder
+          </button>
+        </div>
+
+        <div class="log-container">
+          <pre class="log" id="log">Output logs show up here.</pre>
+        </div>
+      </main>
+    </div>
     <script type="module" src="/src/renderer.ts"></script>
   </body>
 </html>
