@@ -6,6 +6,8 @@ an Electron wrapper for YT-DLP
 - featuring a more modern design, and multiplatform support
 - i just wanted to learn Electron and git
 
+![Preview of the GUI](/assets/preview.png)
+
 ## prerequisites
 
 - yt-dlp
