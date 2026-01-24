@@ -1,4 +1,4 @@
-import { ipcMain, dialog, shell } from 'electron';
+import { ipcMain, dialog, shell, clipboard } from 'electron';
 import { spawn, ChildProcess } from 'child_process';
 import Store from 'electron-store';
 import path from 'node:path';
@@ -147,5 +147,10 @@ export function setupIpcHandlers() {
   // Open folder in file explorer
   ipcMain.handle('shell:openFolder', (_event, folderPath: string) => {
     shell.openPath(folderPath);
+  });
+
+  // Read clipboard text
+  ipcMain.handle('clipboard:getText', () => {
+    return clipboard.readText();
   });
 }

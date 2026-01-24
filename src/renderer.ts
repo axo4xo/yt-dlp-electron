@@ -22,12 +22,16 @@ async function init() {
   ytdlpPathInput.value = settings.ytdlpPath;
   downloadPathInput.value = settings.downloadPath;
 
+  await checkClipboardForUrl();
+
   browseYtdlpBtn.addEventListener('click', browseYtdlp);
   browseFolderBtn.addEventListener('click', browseFolder);
   downloadMp3Btn.addEventListener('click', () => startDownload('mp3'));
   downloadMp4Btn.addEventListener('click', () => startDownload('mp4'));
   cancelBtn.addEventListener('click', cancelDownload);
   openFolderBtn.addEventListener('click', openFolder);
+
+  sourceUrlInput.addEventListener('click', checkClipboardForUrl);
 
   ytdlpPathInput.addEventListener('blur', saveSettings);
   downloadPathInput.addEventListener('blur', saveSettings);
@@ -36,6 +40,13 @@ async function init() {
     appendLog(text);
     parseProgress(text);
   });
+}
+
+async function checkClipboardForUrl() {
+  const clipboardText = await window.api.getClipboardText();
+  if (clipboardText && clipboardText.includes('https://')) {
+    sourceUrlInput.value = clipboardText;
+  }
 }
 
 async function browseYtdlp() {

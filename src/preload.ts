@@ -19,6 +19,7 @@ contextBridge.exposeInMainWorld('api', {
   },
 
   openFolder: (path: string) => ipcRenderer.invoke('shell:openFolder', path),
+  getClipboardText: () => ipcRenderer.invoke('clipboard:getText'),
 });
 
 declare global {
@@ -32,6 +33,7 @@ declare global {
       cancelDownload: () => Promise<boolean>;
       onProgress: (callback: (text: string) => void) => () => void;
       openFolder: (path: string) => Promise<void>;
+      getClipboardText: () => Promise<string>;
     };
   }
 }
