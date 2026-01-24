@@ -74,6 +74,102 @@ body::before {
   z-index: 100;
 }
 
+/* Window Controls */
+.window-controls {
+  -webkit-app-region: no-drag;
+  position: fixed;
+  top: 0;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  z-index: 101;
+}
+
+/* Initially hide both, shown via data-platform */
+.macos-controls,
+.windows-controls {
+  display: none;
+}
+
+/* macOS: show on left */
+[data-platform="darwin"] .macos-controls {
+  display: flex;
+  left: 16px;
+  gap: 8px;
+}
+
+/* Windows/Linux: show on right */
+[data-platform="win32"] .windows-controls,
+[data-platform="linux"] .windows-controls {
+  display: flex;
+  right: 0;
+}
+
+/* macOS Traffic Lights */
+.traffic-light {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: filter 0.15s;
+}
+
+.traffic-light svg {
+  width: 8px;
+  height: 8px;
+  opacity: 0;
+  color: rgba(0, 0, 0, 0.5);
+  transition: opacity 0.15s;
+}
+
+.macos-controls:hover .traffic-light svg {
+  opacity: 1;
+}
+
+.traffic-light.close {
+  background: #ff5f57;
+}
+
+.traffic-light.minimize {
+  background: #febc2e;
+}
+
+.traffic-light.maximize {
+  background: #28c840;
+}
+
+.traffic-light:hover {
+  filter: brightness(1.1);
+}
+
+/* Windows Buttons */
+.win-btn {
+  width: 46px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s, color 0.1s;
+}
+
+.win-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+}
+
+.win-btn.close:hover {
+  background: #e81123;
+  color: white;
+}
+
 .header {
   text-align: center;
   padding: 24px 0 20px;

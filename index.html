@@ -12,8 +12,32 @@
     />
   </head>
   <body>
-    <div class="app">
+    <div class="app" data-platform="windows">
       <div class="drag-region"></div>
+
+      <div class="window-controls macos-controls">
+        <button class="traffic-light close" id="macos-close" title="Close">
+          <svg viewBox="0 0 12 12"><path d="M3.5 3.5l5 5M8.5 3.5l-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <button class="traffic-light minimize" id="macos-minimize" title="Minimize">
+          <svg viewBox="0 0 12 12"><path d="M2.5 6h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </button>
+        <button class="traffic-light maximize" id="macos-maximize" title="Maximize">
+          <svg viewBox="0 0 12 12"><path d="M3 9V3h6v6H3z" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+        </button>
+      </div>
+
+      <div class="window-controls windows-controls">
+        <button class="win-btn minimize" id="win-minimize" title="Minimize">
+          <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6h8" stroke="currentColor" stroke-width="1.2"/></svg>
+        </button>
+        <button class="win-btn maximize" id="win-maximize" title="Maximize">
+          <svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="2" width="8" height="8" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
+        </button>
+        <button class="win-btn close" id="win-close" title="Close">
+          <svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.2"/></svg>
+        </button>
+      </div>
 
       <header class="header">
         <h1 class="logo">yt-dlp&thinsp;<span class="logo-accent">GUI</span></h1>

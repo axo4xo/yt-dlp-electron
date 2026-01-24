@@ -1,4 +1,4 @@
-import { ipcMain, dialog, shell, clipboard } from 'electron';
+import { ipcMain, dialog, shell, clipboard, BrowserWindow } from 'electron';
 import { spawn, ChildProcess } from 'child_process';
 import Store from 'electron-store';
 import path from 'node:path';
@@ -10,7 +10,6 @@ interface StoreSchema {
   downloadPath: string;
 }
 
-// Type assertion needed for electron-store v11 ESM compatibility
 const store = new Store<StoreSchema>() as unknown as {
   get<K extends keyof StoreSchema>(key: K, defaultValue?: StoreSchema[K]): StoreSchema[K];
   set<K extends keyof StoreSchema>(key: K, value: StoreSchema[K]): void;
@@ -18,10 +17,8 @@ const store = new Store<StoreSchema>() as unknown as {
 
 let currentProcess: ChildProcess | null = null;
 
-// Cross-platform default yt-dlp paths
 function getDefaultYtDlpPath(): string {
   if (process.platform === 'win32') {
-    // Windows: check common locations
     const possiblePaths = [
       'C:\\Windows\\System32\\yt-dlp.exe',
       path.join(process.env.LOCALAPPDATA || '', 'Microsoft', 'WinGet', 'Packages', 'yt-dlp.yt-dlp_Microsoft.Winget.Source_8wekyb3d8bbwe', 'yt-dlp.exe'),
@@ -32,20 +29,17 @@ function getDefaultYtDlpPath(): string {
     }
     return 'yt-dlp.exe';
   } else if (process.platform === 'darwin') {
-    // macOS: Homebrew location
     const homebrewPath = '/opt/homebrew/bin/yt-dlp';
     const usrLocalPath = '/usr/local/bin/yt-dlp';
     if (fs.existsSync(homebrewPath)) return homebrewPath;
     if (fs.existsSync(usrLocalPath)) return usrLocalPath;
     return 'yt-dlp';
   } else {
-    // Linux
     return '/usr/bin/yt-dlp';
   }
 }
 
 export function setupIpcHandlers() {
-  // Get saved settings
   ipcMain.handle('settings:get', () => {
     return {
       ytdlpPath: store.get('ytdlpPath', getDefaultYtDlpPath()),
@@ -53,14 +47,12 @@ export function setupIpcHandlers() {
     };
   });
 
-  // Save settings
   ipcMain.handle('settings:set', (_event, settings: { ytdlpPath?: string; downloadPath?: string }) => {
     if (settings.ytdlpPath) store.set('ytdlpPath', settings.ytdlpPath);
     if (settings.downloadPath) store.set('downloadPath', settings.downloadPath);
     return true;
   });
 
-  // Select folder dialog
   ipcMain.handle('dialog:selectFolder', async () => {
     const result = await dialog.showOpenDialog({
       properties: ['openDirectory', 'createDirectory'],
@@ -68,7 +60,6 @@ export function setupIpcHandlers() {
     return result.canceled ? null : result.filePaths[0];
   });
 
-  // Select file dialog (for yt-dlp executable)
   ipcMain.handle('dialog:selectFile', async () => {
     const result = await dialog.showOpenDialog({
       properties: ['openFile'],
@@ -79,7 +70,6 @@ export function setupIpcHandlers() {
     return result.canceled ? null : result.filePaths[0];
   });
 
-  // Download video/audio
   ipcMain.handle('download:start', async (event, options: {
     url: string;
     ytdlpPath: string;
@@ -88,7 +78,6 @@ export function setupIpcHandlers() {
   }) => {
     const { url, ytdlpPath, downloadPath, format } = options;
 
-    // Kill any existing process
     if (currentProcess) {
       currentProcess.kill();
       currentProcess = null;
@@ -134,7 +123,6 @@ export function setupIpcHandlers() {
     });
   });
 
-  // Cancel download
   ipcMain.handle('download:cancel', () => {
     if (currentProcess) {
       currentProcess.kill();
@@ -144,13 +132,34 @@ export function setupIpcHandlers() {
     return false;
   });
 
-  // Open folder in file explorer
   ipcMain.handle('shell:openFolder', (_event, folderPath: string) => {
     shell.openPath(folderPath);
   });
 
-  // Read clipboard text
   ipcMain.handle('clipboard:getText', () => {
     return clipboard.readText();
+  });
+
+  ipcMain.handle('platform:get', () => {
+    return process.platform;
+  });
+
+  ipcMain.handle('window:minimize', (event) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    win?.minimize();
+  });
+
+  ipcMain.handle('window:maximize', (event) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (win?.isMaximized()) {
+      win.unmaximize();
+    } else {
+      win?.maximize();
+    }
+  });
+
+  ipcMain.handle('window:close', (event) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    win?.close();
   });
 }

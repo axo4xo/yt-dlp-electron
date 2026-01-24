@@ -18,6 +18,9 @@ let isDownloading = false;
 let removeProgressListener: (() => void) | null = null;
 
 async function init() {
+  const platform = await window.api.getPlatform();
+  document.querySelector('.app')?.setAttribute('data-platform', platform);
+
   const settings = await window.api.getSettings();
   ytdlpPathInput.value = settings.ytdlpPath;
   downloadPathInput.value = settings.downloadPath;
@@ -40,6 +43,18 @@ async function init() {
     appendLog(text);
     parseProgress(text);
   });
+
+  setupWindowControls();
+}
+
+function setupWindowControls() {
+  document.getElementById('macos-close')?.addEventListener('click', () => window.api.windowClose());
+  document.getElementById('macos-minimize')?.addEventListener('click', () => window.api.windowMinimize());
+  document.getElementById('macos-maximize')?.addEventListener('click', () => window.api.windowMaximize());
+
+  document.getElementById('win-close')?.addEventListener('click', () => window.api.windowClose());
+  document.getElementById('win-minimize')?.addEventListener('click', () => window.api.windowMinimize());
+  document.getElementById('win-maximize')?.addEventListener('click', () => window.api.windowMaximize());
 }
 
 async function checkClipboardForUrl() {

@@ -20,6 +20,10 @@ contextBridge.exposeInMainWorld('api', {
 
   openFolder: (path: string) => ipcRenderer.invoke('shell:openFolder', path),
   getClipboardText: () => ipcRenderer.invoke('clipboard:getText'),
+  getPlatform: () => ipcRenderer.invoke('platform:get'),
+  windowMinimize: () => ipcRenderer.invoke('window:minimize'),
+  windowMaximize: () => ipcRenderer.invoke('window:maximize'),
+  windowClose: () => ipcRenderer.invoke('window:close'),
 });
 
 declare global {
@@ -34,6 +38,10 @@ declare global {
       onProgress: (callback: (text: string) => void) => () => void;
       openFolder: (path: string) => Promise<void>;
       getClipboardText: () => Promise<string>;
+      getPlatform: () => Promise<string>;
+      windowMinimize: () => Promise<void>;
+      windowMaximize: () => Promise<void>;
+      windowClose: () => Promise<void>;
     };
   }
 }
