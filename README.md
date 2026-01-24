@@ -26,3 +26,9 @@ brew install yt-dlp ffmpeg
 npm install
 npm run start
 ```
+
+### building
+```
+npm install
+npm run make
+```
